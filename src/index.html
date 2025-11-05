@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Internal states before 'wait' modulate reasoning patterns</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Latents before wait tokens influence reasoning.
+Features exposed via crosscoders and attribution
+reveal distinct reasoning patterns in DeepSeek-R1-
+Distill-Llama-8B." />
+  <meta property="og:title" content="Internal states before 'wait' modulate reasoning patterns" />
+  <meta property="og:description" content="Latents before wait tokens influence reasoning.
+Features exposed via crosscoders and attribution
+reveal distinct reasoning patterns in DeepSeek-R1-
+Distill-Llama-8B." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Internal states before 'wait' modulate reasoning patterns" />
+  <meta name="twitter:description" content="Latents before wait tokens influence reasoning.
+Features exposed via crosscoders and attribution
+reveal distinct reasoning patterns in DeepSeek-R1-
+Distill-Llama-8B." />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Math&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+
+  <style>
+    .relatedthumb {
+      float: left;
+      width: 200px;
+      margin: 3px 10px 7px 0;
+    }
+
+    .relatedblock {
+      clear: both;
+      display: inline-block;
+    }
+
+    .bold-sc {
+      font-variant: small-caps;
+      font-weight: bold;
+    }
+
+    .cite,
+    .citegroup {
+      margin-bottom: 8px;
+    }
+
+    :target {
+      background-color: yellow;
+    }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FD12LWN557"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date()); gtag('config', 'G-FD12LWN557');
+  </script>
+
+</head>
+
+<body class="nd-docs">
+  <div class="nd-pageheader">
+    <div class="container">
+      <h1 class="lead">
+        Internal states before 'wait' modulate reasoning patterns
+      </h1>
+      <address>
+        <nobr>Dmitrii Troitskii<sup>*1,2</sup>,</nobr>
+        <nobr><a href="https://koyenapal.github.io/" target="_blank">Koyena Pal</a><sup>*2</sup>,</nobr>
+        <nobr><a href="https://wendlerc.github.io/" target="_blank">Chris Wendler</a><sup>2</sup>,</nobr>
+        <nobr><a href="https://www.perfectlynormal.co.uk/" target="_blank">Callum Stuart McDougall</a>,</nobr>
+        <nobr><a href="https://www.neelnanda.io/" target="_blank">Neel Nanda</a></nobr>
+        <br>
+        <nobr><sup>1</sup>Independent,</nobr>
+        <nobr><sup>2</sup><a href="https://khoury.northeastern.edu/" target="_blank">Northeastern University</a></nobr>
+      </address>
+    </div>
+  </div><div class="container">
+    <div class="row justify-content-center text-center">
+
+      <p>
+        <a href="https://arxiv.org/abs/2510.04128" class="d-inline-block p-3 align-top" target="_blank"><img
+            height="100" width="78" src="images/paper-thumb.png" style="border:1px solid; margin: 0 38px;"
+            alt="ArXiv Preprint thumbnail" data-nothumb=""><br>ArXiv<br>Preprint</a>
+        <a href="https://github.com/mitroitskii/interp-experiments/tree/main/reasoning_features"
+          class="d-inline-block p-3 align-top" target="_blank"><img height="100" width="78"
+            src="images/code-thumb.png" style="border:1px solid; margin: 0 38px;" alt="Github code thumbnail"
+            data-nothumb=""><br>Source
+          Code<br>Github</a>
+          <a href="https://huggingface.co/mitroitskii/Crosscoder-Llama-3.1-8B-vs-Llama-R1-Distill-8B/tree/main/L1-Crosscoder" class="d-inline-block p-3 align-top"
+          target="_blank"><img height="100" width="78" src="images/data-thumb.png"
+            style="border:1px solid; margin: 0 38px;" alt="Trained Crosscoder Weights" data-nothumb=""><br>Trained<br>Crosscoder<br>Weights</a>
+      </p>
+
+      <div class="card" style="max-width: 1020px;">
+        <div class="card-block">
+          <h3>Why do reasoning models 'wait'?</h3>
+          <p>
+            Prior work has shown that a significant driver of performance in reasoning models is their
+            ability to reason and self-correct.
+            A distinctive marker in these reasoning traces is the
+            token <b>'wait'</b>, which often signals reasoning behavior such as backtracking.
+          </p>
+          <p>
+            In this work, we address the question whether a model's latents (internal states) preceding 'wait' tokens
+            contain relevant informa-
+            tion for modulating the subsequent reasoning
+            process. We train <b>sparse crosscoders</b> at multiple layers
+            of DeepSeek-R1-Distill-Llama-8B and
+            its base version, and introduce a <b>latent attribu-
+              tion</b> technique in the crosscoder setting. We lo-
+            cate a small set of features relevant for promot-
+            ing/suppressing 'wait' tokens' probabilities.
+            Finally, through causal interventions, we show that many of our identi-
+            fied features are relevant for the reason-
+            ing process and give rise to different types of
+            reasoning patterns such as restarting from the
+            beginning, recalling prior knowledge, and expressing uncertainty.
+          </p>
+        </div></div></div><div class="row">
+      <div class="col">
+
+        <figure class="center_image" style="margin-top: 30px">
+          <center><img src="images/paper/crosscoder.png" style="width:100%; max-width:800px"></center>
+          <figcaption><b>Figure 1:</b> We train sparse crosscoders between a reasoning-finetuned model
+            (DeepSeek-R1-Distill-Llama-8B) and its base version. We then use a novel latent attribution technique to
+            identify features that contribute to the logits of 'wait' tokens.
+          </figcaption>
+        </figure>
+
+        <h2> How to find reasoning features? </h2>
+        <p>To discover features, we first train <b>sparse crosscoders</b>, a technique that
+          jointly decomposes activations from two different models (a base model and a reasoning-finetuned model).
+          This allows us to classify their learned features into three categories: <b>base-only</b>, <b>shared</b>,
+          and <b>reasoning-finetuned</b>.
+          We then apply <b>latent attribution patching</b> to filter for features that strongly
+          modulate the 'wait' token. This gives us a 'top 50' list (features that promote 'wait') and a 'bottom 50'
+          list (features that suppress 'wait').
+        </p>
+
+        <h2> Where do 'wait'-related features come from? </h2>
+        <figure class="center_image" style="margin-top: 30px">
+          <center><img src="images/paper/feature_distribution.png" style="width:100%; max-width:800px"></center>
+          <figcaption><b>Figure 2:</b> Crosscoder classification of the 'top' (promoting wait) and 'bottom' (suppressing
+            wait) features.
+            Interestingly, the bottom features contain a larger number of reasoning-finetuned-only features,
+            suggesting that <i>suppressing</i> 'wait' is a key part of the reasoning process.
+          </figcaption>
+        </figure>
+
+        <h2> What do these features do? (Causal Steering) </h2>
+        <p>
+          To test the causal impact of these features, we perform <b>activation steering</b>. We add the feature's
+          direction vector back into the model's residual stream (at layer 15) during generation to see how it
+          changes the output.
+        </p>
+        <figure class="center_image" style="margin-top: 30px">
+          <center><img src="images/paper/intervened_response.png" style="width:100%; max-width:800px"></center>
+          <figcaption><b>Figure 3:</b> Steering with different features (identified by ID) at different strengths
+            (e.g., 1.5, -1.25) causally changes the model's reasoning pattern. We can induce behaviors like 'Go to
+            Initial Approach', 'Random Knowledge Recall', 'Conclusion', and 'Uncertainty'.
+          </figcaption>
+        </figure>
+
+        <figure class="center_image" style="margin-top: 30px">
+          <center><img src="images/paper/steering.png" style="width:100%; max-width:600px"></center>
+          <figcaption><b>Figure 4:</b> We verified the causal role of our features by measuring the average number of
+            characters generated before the first 'wait' token appears.
+            Steering 'top features' (blue) with negative strength increases the distance to 'wait', while
+            steering 'bottom features' (red) with positive strength does the same.
+          </figcaption>
+        </figure>
+
+
+        <h2> Downstream Evaluation on MATH500 </h2>
+        <p>
+          We evaluated the impact of steering on the <b>MATH500 dataset</b>. We steered with four specific
+          features (one 'top' and three 'bottom') on 100 problems. This table shows the change in accuracy (Acc),
+          median token length, and adherence to the steering direction.
+        </p>
+        <figure class="center_image" style="margin-top: 30px">
+          <center><img src="images/paper/downstream_eval.png" style="width:100%; max-width:800px"></center>
+          <figcaption><b>Table 1:</b> Downstream evaluation on MATH500 (n=100). While accuracy was
+            mostly stable, feature 31748 (a 'top' feature) decreased accuracy to 61% from a baseline of 81%. This
+            shows the features can have a tangible impact on task performance.
+          </figcaption>
+        </figure>
+
+        <h2> What information do the features contain? (Patchscope) </h2>
+        <p>As an additional check, we used <b>Patchscope</b>, an intermediate decoding technique, to investigate the
+          information
+          contained in our selected features. We compute the average next-token distribution for the top and bottom
+          feature groups.
+        </p>
+        <figure class="center_image" style="margin-top: 30px">
+          <center><img src="images/paper/patchscope.png" style="width:100%; max-width:600px"></center>
+          <figcaption><b>Figure 5:</b> The average next-token probabilities from Patchscope.
+            The 'top features' clearly promote 'Wait' and related tokens (like 'But' and 'wait'). The 'bottom
+            features' do not show a clear pattern, promoting the newline token (" ").
+          </figcaption>
+        </figure>
+
+        <h2>How to cite</h2>
+
+        <p>The paper can be cited as follows.
+        </p>
+
+        <div class="card">
+          <h3 class="card-header">bibliography</h3>
+          <div class="card-block">
+            <p style="text-indent: -3em; margin-left: 3em;" class="card-text clickselect">
+              Dmitrii Troitskii, Koyena Pal, Chris Wendler, Callum Stuart McDougall, Neel Nanda. "<em>Internal states
+                before 'wait' modulate reasoning patterns.</em>"
+              arXiv preprint arXiv:2510.04128, 2025.</nobr>
+            </p>
+          </div>
+          <h3 class="card-header">bibtex</h3>
+          <div class="card-block">
+            <pre class="card-text clickselect">
+              @inproceedings{troitskii-etal-2025-internal,
+                title={Internal states before wait modulate reasoning patterns},
+                author={Troitskii, Dmitrii and Pal, Koyena and Wendler, Chris and McDougall, Callum Stuart},
+                booktitle={Findings of the Association for Computational Linguistics: EMNLP 2025},
+                year={2025}
+              }
+</pre>
+          </div>
+        </div>
+        </p>
+
+      </div>
+    </div></div> <footer class="nd-pagefooter">
+    <div class="row">
+    </div>
+  </footer>
+
+</body>
+<script>
+  $(document).on('click', '.clickselect', function (ev) {
+    var range = document.createRange();
+    range.selectNodeContents(this);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+</script>
+
+</html>

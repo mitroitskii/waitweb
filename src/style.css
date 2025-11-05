@@ -1,0 +1,124 @@
+body, td, th {
+  font-family: 'Open Sans', sans-serif;
+}
+h2 {
+  margin-top: 3ex;
+}
+
+/* Color Scheme from Paper Figures (e.g., Fig 2 & 5) */
+.color-primary-0 { color: #8ECDDD } /* Top Features (Light Blue) */
+.color-primary-1 { color: #F0A8A8 } /* Bottom Features (Salmon Red) */
+.color-primary-2 { color: #5A4A78 } /* Dark Purple (Header/Footer) */
+.color-primary-3 { color: #A9D08E } /* Accent Green (from Fig 1) */
+.color-primary-4 { color: #C9BEE0 } /* Crosscoder (Light Purple) */
+
+.nd-pageheader {
+  padding: 2rem 15px;
+  margin-bottom: 1.5rem;
+  color: #E0D8EC; /* Lighter Purple for text */
+  text-align: center;
+  background-color: #5A4A78; /* Dark Purple, from Crosscoder palette */
+}
+
+.nd-pageheader a, .nd-pageheader a.likelink {
+  color: #8ECDDD; /* Light Blue accent for links */
+}
+
+.nd-pagefooter {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  color: #E0D8EC; /* Lighter Purple for text */
+  text-align: center;
+  background-color: #5A4A78; /* Dark Purple, from Crosscoder palette */
+}
+
+.nd-pagefooter a {
+  color: #8ECDDD; /* Light Blue accent for links */
+}
+
+.nd-pageheader .container {
+  position: relative
+}
+
+.nd-pageheader address {
+  font-weight: 300;
+}
+
+.nd-pageheader p, .nd-pageheader h1 {
+  margin-bottom: 0.75rem;
+  font-size: 2.25rem;
+  font-weight: 300;
+  line-height: 1.3;
+}
+
+.citation {
+  margin-top: 15px;
+  clear: both;
+}
+.citation:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.citation img {
+  float: left;
+  margin: 0 10px 10px 0;
+  width: 250px;
+}
+
+.newsmedia {
+  margin-top: 15px;
+  clear: both;
+}
+.newsmedia:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.newsmedia img {
+  float: left;
+  margin: 20px 20px 10px 0;
+  width: 140px;
+  border: none;
+}
+
+
+figcaption {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.highlight {
+  padding: 1.5rem;
+  margin-right: 0;
+  margin-left: 0;
+  background: gainsboro;
+}
+
+.bigfig {
+  max-width: 90%;
+  width: 700px;
+}
+.smallfig {
+  text-align: center;
+  width: 90%;
+}
+.medfig {
+  text-align: center;
+  width: 90%;
+}
+
+.modal .big-modal {
+  width:auto;
+  max-width:90%;
+  max-height:80%;
+}
+
+.img-wrapper {
+  text-align: center;
+}
+
+.big-modal img {
+  max-height: 60vh;
