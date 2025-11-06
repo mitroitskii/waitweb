@@ -15,9 +15,9 @@ h2 {
 .nd-pageheader {
   padding: 2rem 15px;
   margin-bottom: 1.5rem;
-  color: #E0D8EC; /* Lighter Purple for text */
+  color: #333333; /* Dark text for readability */
   text-align: center;
-  background-color: #5A4A78; /* Dark Purple, from Crosscoder palette */
+  background-color: #F4E4C1; /* Warm beige from image */
 }
 
 .nd-pageheader a, .nd-pageheader a.likelink {
@@ -27,9 +27,9 @@ h2 {
 .nd-pagefooter {
   margin-top: 1.5rem;
   padding: 1rem;
-  color: #E0D8EC; /* Lighter Purple for text */
+  color: #333333; /* Dark text for readability */
   text-align: center;
-  background-color: #5A4A78; /* Dark Purple, from Crosscoder palette */
+  background-color: #F4E4C1; /* Warm beige from image */
 }
 
 .nd-pagefooter a {
